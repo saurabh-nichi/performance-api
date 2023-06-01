@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LogsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +26,4 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
 });
+Route::get('read-request-logs', [LogsController::class, 'readRequestLogs'])->name('requestLog');
