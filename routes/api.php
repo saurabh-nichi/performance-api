@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('user')->group(function(){
+Route::prefix('user')->group(function () {
     Route::post('/', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
 });
-Route::middleware('auth:passport')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:api'])->group(function () {
+    Route::prefix('user')->group(function () {
+        Route::post('verify-email/send', [AuthController::class, 'sendVerificationEmail']);
+        Route::post('verify-email/confirm', [AuthController::class, 'verifyEmail']);
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
 });

@@ -28,7 +28,7 @@ class LogRequest
             'headers' => $request->server(),
         ];
         $responseData = [
-            'successful' => (int)($response->isServerError() || $response->isClientError()),
+            'successful' => (int)!($response->isServerError() || $response->isClientError()),
             'status_code' => $response->getStatusCode(),
             'response_body' => $response->getContent(),
         ];
