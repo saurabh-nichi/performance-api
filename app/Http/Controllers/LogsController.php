@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\RequestLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -39,7 +37,52 @@ class LogsController extends Controller
      */
     public function readRequestLogs(Request $request)
     {
-        return $request->all();
+        $query = $this->logTable->select($request->fields);
+        if (!empty($request->route)) {
+            $query->whereIn('route', $request->route);
+        }
+        if (!empty($request->ignore_route)) {
+            $query->whereNotIn('route', $request->ignore_route);
+        }
+        if (!empty($request->method)) {
+            $query->whereIn('method', $request->method);
+        }
+        if (!empty($request->status_code)) {
+            $query->whereIn('status_code', $request->status_code);
+        }
+        if (!empty($request->search)) {
+            $query->where(function ($conditions) use ($request) {
+                foreach ($request->search as $search) {
+                    if ($search['operator'] == 'in' || $search['operator'] == 'not in') {
+                        if (!is_array($search['value'])) {
+                            throw new HttpException(422, 'Value must be an array when <in> or <not in> operator is in use.');
+                        }
+                    }
+                    if (isset($search['successful']) && $search['successful'] !== 'ignore') {
+                        $conditions->where('successful', ($search['successful'] == 'yes' ? 1 : 0));
+                    }
+                    $conditions->where($search['column'], $search['operator'], $search['value']);
+                }
+            });
+        }
+        if (!empty($request->sort)) {
+            foreach ($request->sort as $sort) {
+                $query->orderBy($sort['column'], $sort['order']);
+            }
+        }
+        $totalLogCount = $query->count();
+        if ($request->paginate) {
+            $query->offset(($request->paginate['page'] - 1) * $request->paginate['per_page'])->limit($request->paginate['per_page']);
+        }
+        $queryString = vsprintf(
+            str_replace('?', "'%s'", $query->toSql()),
+            $query->getBindings()
+        );
+        return response()->json([
+            'total' => $totalLogCount,
+            'logs' => $query->get(),
+            'log_search_query' => $queryString
+        ]);
     }
 
     /**

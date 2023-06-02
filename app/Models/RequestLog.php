@@ -25,4 +25,34 @@ class RequestLog extends Model
         }
         return self::create($data);
     }
+
+    public function getResponseBodyAttribute(string $value)
+    {
+        return json_decode($value);
+    }
+
+    public function getPayloadAttribute(string $value)
+    {
+        return json_decode($value);
+    }
+
+    public function getHeadersAttribute(string $value)
+    {
+        return json_decode($value);
+    }
+
+    public function getTimeTakenAttribute(float $value)
+    {
+        return $value == 1 ? $value . ' second' : $value . ' seconds';
+    }
+
+    public function getPeakMemoryUseAttribute(float $value)
+    {
+        return $value . ' MB';
+    }
+
+    public function getSuccessfulAttribute(bool $value)
+    {
+        return $value ? 'YES' : 'NO';
+    }
 }

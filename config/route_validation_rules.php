@@ -30,6 +30,8 @@ return [
     ],
     'read-request-logs' => [
         'POST' => [
+            'fields' => 'required|array',
+            'fields.*' => 'required|string|validate_log_column',
             'route' => 'nullable|array',
             'route.*' => 'required|string|max:255',
             'ignore_route' => 'nullable|array',
@@ -41,9 +43,9 @@ return [
             'search' => 'nullable|array',
             'search.*' => 'required|array',
             'search.*.column' => 'required|string|validate_log_column',
-            'search.*.operator' => 'nullable|string|in:=,!=,<>,>,>=,<,<=,like,not like,in',
-            'search.*.value' => 'required_with:search.*.operator',
-            'search.*.successfull' => 'nullable|in:yes,no,ignore',
+            'search.*.operator' => 'required|string|in:=,!=,<>,>,>=,<,<=,like,not like,in',
+            'search.*.value' => 'required',
+            'search.*.successful' => 'nullable|in:yes,no,ignore',
             'sort' => 'nullable|array',
             'sort.*' => 'required|array',
             'sort.*.column' => 'required|string|validate_log_column',
