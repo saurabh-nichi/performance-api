@@ -76,7 +76,12 @@ class LogsController extends Controller
         }
         $queryString = vsprintf(
             str_replace('?', "'%s'", $query->toSql()),
-            $query->getBindings()
+            array_map(function ($value) {
+                if (is_bool($value)) {
+                    return (int)$value;
+                }
+                return $value;
+            }, $query->getBindings())
         );
         return response()->json([
             'total' => $totalLogCount,
