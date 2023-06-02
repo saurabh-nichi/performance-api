@@ -39,7 +39,7 @@ class LogsController extends Controller
      */
     public function readRequestLogs(Request $request)
     {
-        return ['xxxxxxxxxxxxxxxxxxxxxxxxxxxx'];
+        return $request->all();
     }
 
     /**
