@@ -27,7 +27,7 @@ Verify PHP package <strong><a href="https://openswoole.com/" target="_blank">Swo
 <li>Run command: <code>php artisan passport:install</code></li>
 <li>
 Application is now ready, to serve run: <code>php artisan octane:start --watch</code> & keep it running.<br>
-(<strong>--watch</strong> parameter is optional & watches for changes in laravel app installtion directory, however it consumes more memory.)
+(<strong>--watch</strong> parameter is optional & watches for changes in laravel app installation directory, however it consumes more memory.)
 </li>
 <li>
 In another terminal instance, run: <code>php artisan queue:work</code> and keep it running.<br>
