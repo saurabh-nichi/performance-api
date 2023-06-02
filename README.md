@@ -13,7 +13,7 @@ Php's swoole library must be installed.<br>
 <h3>Installation:</h3>
 <ol>
 <li>
-Verify PHP package <strong>Swoole</strong> is installed in system.<br>
+Verify PHP package <strong><a href="https://openswoole.com/" target="_blank">Swoole</a></strong> is installed in system.<br>
 (Code: <code>sudo apt install php8.2-swoole</code>)
 </li>
 <li>Run command: <code>composer install</code></li>
