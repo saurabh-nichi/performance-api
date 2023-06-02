@@ -17,18 +17,7 @@ class ValidateRequests
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $this->validateRequestByConfigFile(
-            $request,
-            'route_validation_rules',
-            $next
-        );
-    }
-
-    /**
-     * Validate Request
-     */
-    public function validateRequestByConfigFile(Request &$request, string $configFile, Closure $next)
-    {
+        $configFile = 'route_validation_rules';
         $method = strtoupper($request->method());
         $endpoint = strtolower(Str::after($request->url(), '/api/'));
         $rules = config("{$configFile}.{$endpoint}.{$method}");
