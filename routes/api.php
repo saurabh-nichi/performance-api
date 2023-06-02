@@ -26,4 +26,4 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
 });
-Route::get('read-request-logs', [LogsController::class, 'readRequestLogs'])->name('requestLog');
+Route::post('read-request-logs', [LogsController::class, 'readRequestLogs'])->name('requestLog');

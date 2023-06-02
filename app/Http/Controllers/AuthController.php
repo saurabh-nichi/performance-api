@@ -14,11 +14,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -32,12 +27,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required|string|max:255',
-            'remember' => 'nullable|boolean'
-        ]);
-        if (Auth::attempt(Arr::only($credentials, ['email', 'password']), $request->remember)) {
+        if (Auth::attempt(Arr::only($request->all(), ['email', 'password']), $request->remember)) {
             $user = Auth::user();
             $user['token'] = $user->createToken(str_replace(
                 ' ',
@@ -68,11 +58,12 @@ class AuthController extends Controller
 
     public function verifyEmail(Request $request)
     {
-        $request->validate(['token' => 'required|string|max:255']);
         if ($request->user()->email == Crypt::decryptString($request->token)) {
-            $request->user()->update([
-                'email_verified_at' => now()
-            ]);
+            if (!$request->user()->email_verified_at) {
+                $request->user()->update([
+                    'email_verified_at' => now()
+                ]);
+            }
             return response()->json([
                 'message' => 'Email verified, welcome ... '
             ]);
