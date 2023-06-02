@@ -1,4 +1,7 @@
 # performance-api
+
+<p><pre>Laravel Framework <font color="#26A269">10.13.1</font></pre></p>
+
 A <a href="https://laravel.com/docs/10.x" target="_blank">laravel</a> api optimised for performance, works in tandem with <a href="https://laravel.com/docs/10.x/octane#main-content" target="_blank">laravel/octane</a> and <a href="https://laravel.com/docs/10.x/queues#main-content" target="_blank">queues</a>.
 
 <h3>Minimum Requirements:</h3>
@@ -35,4 +38,4 @@ To translate, use function <code>translate()</code>, works in similar way as <co
 The function is autoloaded through <code>composer.json</code> and can be found in file: <code>app/Helpers/custom-functions.php</code>.
 </p>
 
-<h4>Feel free to suggest changes. :)</h4>
+<h4>Feel free to suggest changes. 😌</h4>
