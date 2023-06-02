@@ -3,6 +3,7 @@
 $allowedMethods = 'GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS';
 
 return [
+    'ignore_routes' => [],
     'user' => [
         'POST' => [
             'name' => 'required|string|max:255',

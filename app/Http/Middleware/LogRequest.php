@@ -16,7 +16,9 @@ class LogRequest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd($request->all(), get_class_methods($request));
+        if (in_array($request->path(), config('route_validation_rules.ignore_routes'))) {
+            return $next($request);
+        }
         $startTime = now();
         $response = $next($request);
         $requestData = [
