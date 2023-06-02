@@ -11,8 +11,8 @@ class RequestLog extends Model
     use HasFactory;
     const UPDATED_AT = null;
     protected $fillable = [
-        'payload', 'created_at', 'headers', 'id', 'method', 'peak_memory_use', 'request_completed_on', 'request_ipv4', 'request_ipv6', 'request_start_time', 'route', 'successful',
-        'status_code', 'response_body', 'time_taken'
+        'payload', 'created_at', 'headers', 'id', 'method', 'peak_memory_use', 'request_completed_on', 'request_ipv4',
+        'request_ipv6', 'request_start_time', 'route', 'successful', 'status_code', 'response_body', 'time_taken'
     ];
 
     public static function store(array &$data)
