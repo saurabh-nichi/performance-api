@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 
+use function App\Helpers\translate;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -20,7 +22,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
         ]);
         return response()->json([
-            'message' => 'User created successfully',
+            'message' => translate('messages.user_created'),
             'user' => $user
         ]);
     }
@@ -37,22 +39,22 @@ class AuthController extends Controller
             return response()->json($user);
         }
         return response()->json([
-            'message' => 'Invalid credentials!'
+            'message' => translate('messages.errors.invalid_credentials')
         ], 403);
     }
 
     public function sendVerificationEmail(Request $request)
     {
         if ($request->user()->email_verified_at) {
-            return response()->json(['message' => 'Email is already verified.'], 409);
+            return response()->json(['message' => translate('messages.errors.email_already_verified')], 409);
         }
         Mail::to($request->user()->email)->send(new GenerateMail(
             'emails.verify_email',
-            'Please verify your email',
+            translate('messages.email.subjects.verify_email'),
             ['token' => Crypt::encryptString($request->user()->email)]
         ));
         return response()->json([
-            'message' => 'Verification email sent.'
+            'message' => translate('messages.verification_email_sent')
         ]);
     }
 
@@ -65,11 +67,11 @@ class AuthController extends Controller
                 ]);
             }
             return response()->json([
-                'message' => 'Email verified, welcome ... '
+                'message' => translate('messages.email_verified')
             ]);
         } else {
             return response()->json([
-                'message' => 'Invalid token!'
+                'message' => translate('messages.errors.invalid_token')
             ], 403);
         }
     }
@@ -78,7 +80,7 @@ class AuthController extends Controller
     {
         Auth::user()->tokens()->delete();
         return response()->json([
-            'message' => 'Successfully logged out',
+            'message' => translate('messages.logged_out'),
         ]);
     }
 }

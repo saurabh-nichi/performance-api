@@ -7,6 +7,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use function App\Helpers\translate;
+
 class ValidateRequests
 {
 
@@ -23,7 +25,7 @@ class ValidateRequests
         $rules = config("{$configFile}.{$endpoint}.{$method}");
         if (is_null($rules)) {
             return response()->json([
-                'message' => 'Access denied. Validation configuration not available!'
+                'message' => translate('messages.errors.validation_config_absent')
             ], 422);
         }
         $request->validate($rules);

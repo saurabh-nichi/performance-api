@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+use function App\Helpers\translate;
+
 class LogsController extends Controller
 {
     private $logTable;
@@ -18,13 +20,13 @@ class LogsController extends Controller
         if (empty(env('LOG_API_ACCESS_KEY'))) {
             throw new HttpException(
                 500,
-                'Logs read api access key not set. Please run: php artisan generate:log_api_access_key'
+                translate('messages.errors.log_access_key_not_set')
             );
         }
         if (!request()->hasHeader('Log-Api-Access-Key') || !Hash::check(request()->header('Log-Api-Access-Key'), env('LOG_API_ACCESS_KEY'))) {
             throw new HttpException(
                 403,
-                'Logs read api access denied. Invalid access key.'
+                translate('messages.errors.invalid_log_access_key')
             );
         }
         $this->logTable = new RequestLog();
@@ -55,7 +57,7 @@ class LogsController extends Controller
                 foreach ($request->search as $search) {
                     if ($search['operator'] == 'in' || $search['operator'] == 'not in') {
                         if (!is_array($search['value'])) {
-                            throw new HttpException(422, 'Value must be an array when <in> or <not in> operator is in use.');
+                            throw new HttpException(422, translate('messages.errors.value_must_be_array_when_operator_in'));
                         }
                     }
                     if (isset($search['successful']) && $search['successful'] !== 'ignore') {
