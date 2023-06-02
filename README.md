@@ -1,5 +1,5 @@
 # performance-api
-A laravel api optimised for performance, works in tandem with laravel/octane and queue worker.
+A <a href="https://laravel.com/docs/10.x" target="_blank">laravel</a> api optimised for performance, works in tandem with <a href="https://laravel.com/docs/10.x/octane#main-content" target="_blank">laravel/octane</a> and <a href="https://laravel.com/docs/10.x/queues#main-content" target="_blank">queues</a>.
 
 <h3>Minimum Requirements:</h3>
 OS: LINUX<br>
@@ -28,3 +28,11 @@ In another terminal instance, run: <code>php artisan queue:work</code> and keep 
 (Alternatively, <code>php artisan queue:listen</code> can be used to monitor file changes, however it consumes more memory.)
 </li>
 </ol>
+
+<h3>Usage Instructions:</h3>
+<p>
+To translate, use function <code>translate()</code>, works in similar way as <code>trans()</code> laravel function.<br>
+The function is autoloaded through <code>composer.json</code> and can be found in file: <code>app/Helpers/custom-functions.php</code>.
+</p>
+
+<h4>Feel free to suggest changes. :)</h4>
