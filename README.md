@@ -12,6 +12,7 @@ Php's swoole library must be installed.<br>
 
 <h3>Installation:</h3>
 <ol>
+<li>Verify <strong><a href="https://nodejs.org/" target="_blank">Node</a></strong> is installed.</li>
 <li>
 Verify PHP package <strong><a href="https://openswoole.com/" target="_blank">Swoole</a></strong> is installed in system.<br>
 (Code: <code>sudo apt install php8.2-swoole</code>)
