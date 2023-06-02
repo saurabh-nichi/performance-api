@@ -30,9 +30,6 @@ return [
     ],
     'read-request-logs' => [
         'POST' => [
-            'paginate' => 'nullable|array|size:2',
-            'paginate.page' => 'integer|min:1|required_with:paginate',
-            'paginate.per_page' => 'integer|min:1|required_with:paginate',
             'route' => 'nullable|array',
             'route.*' => 'required|string|max:255',
             'ignore_route' => 'nullable|array',
@@ -50,7 +47,10 @@ return [
             'sort' => 'nullable|array',
             'sort.*' => 'required|array',
             'sort.*.column' => 'required|string|validate_log_column',
-            'sort.*.order' => 'required|in:asc,desc'
+            'sort.*.order' => 'required|in:asc,desc',
+            'paginate' => 'nullable|array|size:2',
+            'paginate.page' => 'integer|min:1|required_with:paginate',
+            'paginate.per_page' => 'integer|min:1|required_with:paginate',
         ]
     ]
 ];
