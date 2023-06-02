@@ -24,7 +24,7 @@ Application is now ready, to serve run: <code>php artisan octane:start --watch</
 </li>
 <li>
 In another terminal instance, run: <code>php artisan queue:work</code> and keep it running.<br>
-(Everytime there is some change in queue related files, this command has to be restarted.)
+(Everytime there is some change in queue related files, this command has to be restarted.)<br>
 (Alternatively, <code>php artisan queue:listen</code> can be used to monitor file changes, however it consumes more memory.)
 </li>
 </ol>
