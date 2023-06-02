@@ -18,3 +18,16 @@ if (!function_exists('translate')) {
         return trans($key, $replace, $locale);
     }
 }
+
+if (!function_exists('getAvailableLocales')) {
+    /**
+     * Get available locales
+     * @return array
+     */
+    function getAvailableLocales()
+    {
+        return array_filter(scandir(base_path('lang')), function ($item) {
+            return !in_array($item, ['.', '..']);
+        });
+    }
+}

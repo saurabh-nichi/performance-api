@@ -6,6 +6,10 @@ use Illuminate\Support\Str;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Translation\FileLoader;
+use Illuminate\Translation\Translator;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Validator;
 
 use function App\Helpers\translate;
 
@@ -28,7 +32,20 @@ class ValidateRequests
                 'message' => translate('messages.errors.validation_config_absent')
             ], 422);
         }
-        $request->validate($rules);
+        $locale = request()->header('Accept-Language') ?? config('app.locale');
+        $validator = Validator::make($request->all(), $rules);
+        $validator->setTranslator(
+            new Translator(
+                new FileLoader(new Filesystem(), base_path('lang')),
+                $locale
+            )
+        );
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => translate('messages.errors.invalid_request_payload'),
+                'errors' => $validator->errors()
+            ], 422);
+        }
         return $next($request);
     }
 }
