@@ -2,7 +2,7 @@
 
 <p><pre>Laravel Framework <font color="#26A269">10.13.1</font></pre></p>
 
-A <a href="https://laravel.com/docs/10.x" target="_blank">laravel</a> api optimised for performance, uses <a href="https://laravel.com/docs/10.x/passport" target="_blank">laravel/passport</a>, <a href="https://laravel.com/docs/10.x/octane#main-content" target="_blank">laravel/octane</a> and <a href="https://laravel.com/docs/10.x/queues#main-content" target="_blank">queues</a>.
+A <a href="https://laravel.com/docs/10.x" target="_blank">laravel</a> api optimised for performance, uses <a href="https://laravel.com/docs/10.x/passport" target="_blank">laravel/passport</a>, <a href="https://laravel.com/docs/10.x/octane" target="_blank">laravel/octane</a> and <a href="https://laravel.com/docs/10.x/queues" target="_blank">queues</a>.
 
 <h3>Minimum Requirements:</h3>
 OS: LINUX<br>
