@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->group(function () {
     Route::post('/', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('reset-password', [AuthController::class, 'generateResetPasswordToken']);
 });
 Route::middleware(['auth:api'])->group(function () {
     Route::prefix('user')->group(function () {

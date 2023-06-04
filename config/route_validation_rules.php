@@ -29,6 +29,13 @@ return [
     'user/logout' => [
         'POST' => []
     ],
+    'user/reset-password' => [
+        'POST' => [
+            'email' => 'required|email|exists:users',
+            'token' => 'nullable|string|size:8',
+            'new_password' => 'string|min:6|required_with:token'
+        ]
+    ],
     'read-request-logs' => [
         'POST' => [
             'fields' => 'required|array',
