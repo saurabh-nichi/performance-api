@@ -339,4 +339,48 @@ trait Miscellaneous
         }
         return $parsedData;
     }
+
+    public function calculateAverage(array $array)
+    {
+        $count = count($array);
+        if (!$count) {
+            return 0;
+        }
+        $sum = array_sum($array);
+        return $sum / $count;
+    }
+
+    public function getAvailableRAM() {
+        $command = 'free -m | grep "Mem:"';
+        $output = shell_exec($command);
+        $availableRAM = Arr::last(explode(' ', $output));
+        return $availableRAM;
+    }
+
+    /**
+     * Find prime numbers in a given range. Uses: Sieve of Eratosthenes algorithm
+     * @return array
+     */
+    public function findPrimesBetween(int $start, int $end) {
+        // Create an array to track prime numbers
+        $isPrime = array_fill($start, $end + 1, true);
+        // 0 and 1 are not prime
+        $isPrime[0] = $isPrime[1] = false;
+        // Perform the sieve
+        for ($i = 2; $i * $i <= $end; $i++) {
+            if ($isPrime[$i]) {
+                for ($j = $i * $i; $j <= $end; $j += $i) {
+                    $isPrime[$j] = false;
+                }
+            }
+        }
+        // Collect prime numbers within the range
+        $primes = [];
+        for ($i = $start; $i <= $end; $i++) {
+            if ($isPrime[$i]) {
+                $primes[] = $i;
+            }
+        }
+        return $primes;
+    }
 }
