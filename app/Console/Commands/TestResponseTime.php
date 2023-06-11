@@ -35,7 +35,8 @@ class TestResponseTime extends Command
     {
         print('Initiating ... ');
         app()->setLocale('en');
-        set_time_limit(24 * 3600); // 24 hours
+        $timeLimit = 24 * 3600;
+        set_time_limit($timeLimit); // 24 hours
         $availableRam = $this->getAvailableRAM();
         if ($this->argument('memoryLimit')) {
             if (!is_numeric($this->argument('memoryLimit')) || $this->argument('memoryLimit') > 99 || $this->argument('memoryLimit') < 1) {
@@ -84,7 +85,7 @@ class TestResponseTime extends Command
                     fn () => User::all()->filter(function ($user) {
                         return Str::contains(Str::before($user->email, '@'), ['a', 'e', 'i', 'o', 'u']);
                     })
-                ]);
+                ], ($timeLimit / 2) * 1000);
             } else {
                 print('WITHOUT USING CONCURRENCY ... ');
                 $users_withPrimeIds = User::all()->filter(function ($user) use ($primes) {
