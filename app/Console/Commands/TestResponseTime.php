@@ -76,6 +76,7 @@ class TestResponseTime extends Command
                 'memory' => memory_get_usage(true)
             ];
             if ($this->option('useConcurrency')) {
+                print('USING CONCURRENCY ... ');
                 [$users_withPrimeIds, $users_withVowelsInEmail] = Octane::concurrently([
                     fn () => User::all()->filter(function ($user) use ($primes) {
                         return in_array($user->id, $primes);
@@ -85,6 +86,7 @@ class TestResponseTime extends Command
                     })
                 ]);
             } else {
+                print('WITHOUT USING CONCURRENCY ... ');
                 $users_withPrimeIds = User::all()->filter(function ($user) use ($primes) {
                     return in_array($user->id, $primes);
                 });
@@ -128,9 +130,8 @@ class TestResponseTime extends Command
             'memory' => memory_get_usage(true) - $runStart['memory'] / (1024 * 1024)
             //----------------------------|-memory used in bytes--------------------KB-----MB----
         ];
-        print('Total memory used: ' . number_format($runTook['memory'] / (1024 * 1024), 7) . ' MB');
+        print('Total memory used: ' . number_format($runTook['memory'] / (1024 * 1024), 7) . ' MB. Total time taken: ' . $runTook['time'] . PHP_EOL);
         //-----------------------------------------|-memory used in bytes-------KB-----MB----
-        print('Total time taken: ' . $runTook['time'] . PHP_EOL);
         print('----------------------------------------------------------------------------------------------' . PHP_EOL);
         return 1;
     }
