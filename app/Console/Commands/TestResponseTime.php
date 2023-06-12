@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use Illuminate\Console\Command;
 use App\Traits\Miscellaneous;
 use Illuminate\Support\Facades\Artisan;
@@ -69,6 +68,11 @@ class TestResponseTime extends Command
         $idMax = DB::table('users')->select('id')->orderByDesc('id')->limit(1)->first()->id;
         $primes = $this->findPrimesBetween($idMin, $idMax);
         print('Done.' . PHP_EOL);
+        if (!$this->option('useConcurrency')) {
+            print('Fetching all users data ... ');
+            $users = DB::table('users')->get();
+            print('Done.' . PHP_EOL);
+        }
         print('----------------------------------------------------------------------------------------------' . PHP_EOL);
         for ($i = 0; $i < $this->argument('maxSample'); $i++) {
             print('Running ....   Sample: ' . number_format($i + 1) . ' / ' . number_format($this->argument('maxSample')) . ' ... ');
@@ -79,19 +83,19 @@ class TestResponseTime extends Command
             if ($this->option('useConcurrency')) {
                 print('USING CONCURRENCY ... ');
                 [$users_withPrimeIds, $users_withVowelsInEmail] = Octane::concurrently([
-                    fn () => User::all()->filter(function ($user) use ($primes) {
+                    fn () => DB::table('users')->get()->filter(function ($user) use ($primes) {
                         return in_array($user->id, $primes);
                     }),
-                    fn () => User::all()->filter(function ($user) {
+                    fn () => DB::table('users')->get()->filter(function ($user) {
                         return Str::contains(Str::before($user->email, '@'), ['a', 'e', 'i', 'o', 'u']);
                     })
                 ], ($timeLimit / 2) * 1000);
             } else {
                 print('WITHOUT USING CONCURRENCY ... ');
-                $users_withPrimeIds = User::all()->filter(function ($user) use ($primes) {
+                $users_withPrimeIds = $users->filter(function ($user) use ($primes) {
                     return in_array($user->id, $primes);
                 });
-                $users_withVowelsInEmail = User::all()->filter(function ($user) {
+                $users_withVowelsInEmail = $users->filter(function ($user) {
                     return Str::contains(Str::before($user->email, '@'), ['a', 'e', 'i', 'o', 'u']);
                 });
             }
