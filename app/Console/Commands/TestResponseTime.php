@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Traits\Miscellaneous;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Octane\Facades\Octane;
@@ -68,11 +69,13 @@ class TestResponseTime extends Command
         $idMax = DB::table('users')->select('id')->orderByDesc('id')->limit(1)->first()->id;
         $primes = $this->findPrimesBetween($idMin, $idMax);
         print('Done.' . PHP_EOL);
+        print('Fetching all users data ... ');
         if (!$this->option('useConcurrency')) {
-            print('Fetching all users data ... ');
             $users = DB::table('users')->get();
-            print('Done.' . PHP_EOL);
+        } else {
+            Cache::store('octane')->put('users', DB::table('users')->get(), now()->addSeconds($timeLimit));
         }
+        print('Done.' . PHP_EOL);
         print('----------------------------------------------------------------------------------------------' . PHP_EOL);
         for ($i = 0; $i < $this->argument('maxSample'); $i++) {
             print('Running ....   Sample: ' . number_format($i + 1) . ' / ' . number_format($this->argument('maxSample')) . ' ... ');
@@ -83,10 +86,10 @@ class TestResponseTime extends Command
             if ($this->option('useConcurrency')) {
                 print('USING CONCURRENCY ... ');
                 [$users_withPrimeIds, $users_withVowelsInEmail] = Octane::concurrently([
-                    fn () => DB::table('users')->get()->filter(function ($user) use ($primes) {
+                    fn () => Cache::store('octane')->get('users')->filter(function ($user) use ($primes) {
                         return in_array($user->id, $primes);
                     }),
-                    fn () => DB::table('users')->get()->filter(function ($user) {
+                    fn () => Cache::store('octane')->get('users')->filter(function ($user) {
                         return Str::contains(Str::before($user->email, '@'), ['a', 'e', 'i', 'o', 'u']);
                     })
                 ], ($timeLimit / 2) * 1000);
