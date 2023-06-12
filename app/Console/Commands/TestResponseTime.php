@@ -69,6 +69,7 @@ class TestResponseTime extends Command
         $idMin = DB::table('users')->select('id')->orderBy('id')->limit(1)->first()->id;
         $idMax = DB::table('users')->select('id')->orderByDesc('id')->limit(1)->first()->id;
         $primes = $this->findPrimesBetween($idMin, $idMax);
+        unset($idMin, $idMax);
         print('Done.' . PHP_EOL);
         print('Fetching all users data ... ');
         if (!$this->option('useConcurrency')) {
@@ -89,6 +90,7 @@ class TestResponseTime extends Command
             ];
             if ($this->option('useConcurrency')) {
                 print('USING CONCURRENCY ... ');
+                // TODO: Fix cache issue
                 [$users_withPrimeIds, $users_withVowelsInEmail] = Octane::concurrently([
                     fn () => Cache::store('octane')->get('users')->filter(function ($user) use ($primes) {
                         return in_array($user->id, $primes);
