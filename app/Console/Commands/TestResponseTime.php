@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Traits\Miscellaneous;
+use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -73,6 +74,9 @@ class TestResponseTime extends Command
         if (!$this->option('useConcurrency')) {
             $users = DB::table('users')->get();
         } else {
+            if (str_contains(shell_exec('php artisan octane:status'), 'Octane server is not running.')) {
+                throw new Exception('Please run octane server first to test with concurrency.');
+            }
             Cache::store('octane')->put('users', DB::table('users')->get(), now()->addSeconds($timeLimit));
         }
         print('Done.' . PHP_EOL);
@@ -110,7 +114,6 @@ class TestResponseTime extends Command
                 'prime_ids' => $users_withPrimeIds->count(),
                 'vowels_in_email' => $users_withVowelsInEmail->count()
             ];
-            $users_withPrimeIds = $users_withVowelsInEmail = null;
             print('Complete.' . PHP_EOL);
             $took = [
                 'time' => $end['time'] - $start['time'], // in seconds
@@ -122,6 +125,7 @@ class TestResponseTime extends Command
             //--------------------------------------------|-memory used in bytes-----KB-----MB----
             print('Time taken: ' . number_format($took['time']) . ' seconds' . PHP_EOL);
             print('----------------------------------------------------------------------------------------------' . PHP_EOL);
+            $start = $end = $counts = $took = $users_withPrimeIds = $users_withVowelsInEmail = null;
         }
         $diff['memory'] = array_column($diff, 'memory');
         $diff['time'] = array_column($diff, 'time');
