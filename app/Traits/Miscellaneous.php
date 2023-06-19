@@ -53,12 +53,13 @@ trait Miscellaneous
 
     /**
      * Generate a password prompt & read password from command line
+     * @param string $promptMessage
      * @return string
      * @source: https://chat.openai.com/
      */
-    public function readPasswordFromCli()
+    public function readPasswordFromCli(string $promptMessage = 'Enter password: '): string
     {
-        print('Enter password: ');
+        print($promptMessage);
         shell_exec("stty -echo"); // Execute the stty command to turn off echo
         $password = trim(fgets(STDIN)); // Read the password from the terminal
         shell_exec("stty echo"); // Execute the stty command to turn on echo
